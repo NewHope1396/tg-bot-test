@@ -12,7 +12,8 @@ bot.setMyCommands([
     {command: "/start", description: "Перезапустити бота"},
     {command: "/missyou", description: "Сумую(("},
     {command: "/loveyou", description: "Кохаю тебе❤️"},
-    {command: "/game", description: "Зіграти в гру🎮"}
+    {command: "/game", description: "Зіграти в гру🎮"},
+    {command: "/check", description: "Перевірити чи все ок"}
 ])
 
 const chats = {};
@@ -46,6 +47,10 @@ bot.on("message", async (msg) => {
         case "/game":
             await bot.sendMessage(id, "Зараз я загадаю цифру від 0 до 9, а ти спробуй відгадати)")
             startGame(id);
+            break
+            
+        case "/check":
+            await bot.sendMessage(id, "Все ок))")
             break
 
         default: 
