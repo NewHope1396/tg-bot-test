@@ -1,14 +1,28 @@
-const token = "6353528834:AAF_sOdMlJQXHw-8v_b7l62MLBJ8w29yBDU";
+const {gameOptions, restartOptions} = require("./options")
+
+require('dotenv').config();
+
+const {TOKEN} = process.env; 
 
 const api = require("node-telegram-bot-api");
 
-const bot = new api(token, {polling: true});
+const bot = new api(TOKEN, {polling: true});
 
 bot.setMyCommands([
     {command: "/start", description: "Перезапустити бота"},
     {command: "/missyou", description: "Сумую(("},
-    {command: "/loveyou", description: "Кохаю тебе❤️"}
+    {command: "/loveyou", description: "Кохаю тебе❤️"},
+    {command: "/game", description: "Зіграти в гру🎮"}
 ])
+
+const chats = {};
+
+const startGame = async (id) => {
+    const number = Math.floor(Math.random() * 10)
+    chats.chatId = number;
+    await bot.sendMessage(id, `Гра почалась)`, gameOptions)
+} 
+
 
 bot.on("message", async (msg) => {
     const text = msg.text;
@@ -29,9 +43,27 @@ bot.on("message", async (msg) => {
             await bot.sendMessage(id, "Я тебе більше😍❤️🥰")
             break
 
+        case "/game":
+            await bot.sendMessage(id, "Зараз я загадаю цифру від 0 до 9, а ти спробуй відгадати)")
+            startGame(id);
+            break
+
         default: 
             await bot.sendMessage(id, "Поки ще не розумію тебе((")
             break
     }
 
+})
+
+bot.on("callback_query", async msg => {
+    const data = msg.data;
+    const id = msg.message.chat.id;
+    if (Number(data) === chats.chatId) { 
+        return await bot.sendMessage(id, `Твій вибір кнопка ${data} і це вірно, перемога🥳🥳🥳`, restartOptions)
+    }
+    if ( data === "/restart") {
+        return startGame(id);
+    }
+
+    return await bot.sendMessage(id, `Твій вибір кнопка ${data} і нажаль це неправильний вибір`, restartOptions)
 })

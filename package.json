@@ -6,6 +6,7 @@
   "author": "NewHope1396 <rimondtt@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "node-telegram-bot-api": "^0.61.0",
     "nodemon": "^3.0.1"
   },
